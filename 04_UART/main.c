@@ -3,6 +3,11 @@
 // to enable clock access, we need to set the bit 17 of RCC_APB1ENR to 1. 
 
 
+void set_ahb1_periperhal_clock(uint32_t);
+void set_ahb2_periperhal_clock(uint32_t);
+void set_apb1_periperhal_clock(uint32_t);
+void set_apb2_periperhal_clock(uint32_t);
+
 void USART2_init(void);
 int main(void){
 	while (1){
@@ -24,8 +29,28 @@ void USART2_init(void){
 	GPIOA->AFR[0] |= 0x00007000;  // to set alternate function to UART_R X
 	
 	USART2->BRR |= 0x2BF2;
-	USART2->CR1 |= 0x0001;
+
 	
-	USART2->CR1 |= 0x0004;
-	USART2->CR1 |= 0x0008;
+	USART2->CR1 |= 0x0004; // Transmit Enable
+	USART2->CR1 |= 0x0008; // Recevive Enable
+	
+	USART2->CR1 |= 0x0001; // enabling uart. 
+}
+
+
+void set_ahb1_periperhal_clock(uint32_t peripheral){
+	SET_BIT(RCC->AHB1ENR, peripheral);
+}
+void set_ahb2_periperhal_clock(uint32_t peripheral){
+	SET_BIT(RCC->AHB2ENR, peripheral);
+	
+}
+
+
+void set_apb1_periperhal_clock(uint32_t peripheral){
+	SET_BIT(RCC->APB1ENR, peripheral);
+}
+
+void set_apb2_periperhal_clock(uint32_t peripheral){
+	SET_BIT(RCC->APB2ENR, peripheral);
 }
